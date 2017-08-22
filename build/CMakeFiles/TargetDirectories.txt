@@ -1,0 +1,3 @@
+/mnt/c/Users/Soroush/Desktop/carnd/proj11/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Soroush/Desktop/carnd/proj11/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/Soroush/Desktop/carnd/proj11/build/CMakeFiles/path_planning.dir
