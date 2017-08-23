@@ -62,7 +62,7 @@ void LaneChangeState::process(Car car, vector<vector<double>> sensor_fusion, int
 		//monitoring lanes
 		if (in_lane_change == false){
 			//our lane
-			if (d<(4*(*lane+1)) && d > (4*(*lane))){
+			if (d<car.d+2 && d > car.d-2){
 				//if the car ahead is too close
 				if (check_car_s>car_s && (check_car_s-car_s)<50){
 					too_close = true;
@@ -70,13 +70,14 @@ void LaneChangeState::process(Car car, vector<vector<double>> sensor_fusion, int
 					cout << "TOO CLOSE NEED TO CHANGE" << endl;
 					
 					//if it is VERY close, brake NOW
-					if (fabs(check_car_s-car_s)<10) {
+					if (fabs(check_car_s-car_s)<15) {
 						brake_immediately = true;
+						cout << "!!!DANGEROUSLY CLOSE!!!" << endl;
 					}
 				}
 			} 
 			//checking left lane
-			if (*lane == 0 || (d<((*lane)*4) && d > ((*lane-1)*4))){
+			if (*lane == 0 || (d < car.d-2 && d>car.d-6)){
 				//if we are in left lane, mark our left lane as unsafe.
 				//else if there is a car 10 units behind us or 60 in front, lane is occupied and unsafe to go to
 				if (*lane == 0 || (check_car_s > (car_s - 10) && check_car_s < (car_s + 60))){
@@ -85,7 +86,7 @@ void LaneChangeState::process(Car car, vector<vector<double>> sensor_fusion, int
 				}
 			} 
 			//same as left lane but now for right lane.
-			if (*lane == 2 || (d<(4*(*lane+2)) && d > (4*((*lane)+1)))){
+			if (*lane == 2 || (d<car.d+6 && d>car.d+2)){
 				if (*lane == 2 || (check_car_s > (car_s - 10) && check_car_s < (car_s + 60))){
 					is_right_safe = false;
 					cout << "**********RIGHT IS OCCUPIED!" << endl;
@@ -115,16 +116,17 @@ void LaneChangeState::process(Car car, vector<vector<double>> sensor_fusion, int
 			*(_state_machine->target_velocity) -= 0.22;
 		}
 		if (in_lane_change == false){
-			initial_lane = *lane;
 			//change lane to left. left has priority. we go to right if left is blocked.
 			if (*lane > 0 && is_left_safe){
 				cout << "Moving to LEFT lane" << endl;
+				initial_lane = *lane;
 				*lane -= 1;
 				target_lane = *lane;
 				in_lane_change = true;
 			} else if (*lane < 2 && is_right_safe){
 				//change lane to right. if right is blocked too, just slow down and follow the car ahead.
 				cout << "Moving to RIGHT lane" << endl;
+				initial_lane = *lane;
 				*lane += 1;
 				target_lane = *lane;
 				in_lane_change = true;

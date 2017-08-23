@@ -301,7 +301,6 @@ int main() {
                 ptsy.push_back(ref_y);
               }
 
-//              int lane_d = 2+4*lane;
               int lane_d = 2+4*lane;
               vector<double> next_wp0 = getXY(car_s+30,lane_d,map_waypoints_s, map_waypoints_x, map_waypoints_y );
               vector<double> next_wp1 = getXY(car_s+60,lane_d,map_waypoints_s, map_waypoints_x, map_waypoints_y );
